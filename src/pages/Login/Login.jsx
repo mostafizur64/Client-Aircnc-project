@@ -6,12 +6,14 @@ import { useContext } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
 import toast from "react-hot-toast";
 import { TbFidgetSpinner } from "react-icons/tb";
+import { saveUser } from "../../api/auth";
 
 const Login = () => {
   const { loading, setLoading, signIn, signInWithGoogle, resetPassword } =
     useContext(AuthContext);
+    
   console.log(loading);
-
+ 
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
@@ -43,7 +45,8 @@ const Login = () => {
     signInWithGoogle()
       .then((result) => {
         console.log(result.user);
-        navigate("/");
+        saveUser(result.user);
+        navigate(from, { replace: true });
       })
       .then((error) => {
         console.log(error.message);
